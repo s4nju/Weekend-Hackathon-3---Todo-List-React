@@ -1,61 +1,81 @@
-import React, { useRef } from "react";
-import "./../styles/App.css";
-import Task from "./Task";
+import { ListItemSecondaryAction } from '@material-ui/core';
+import React, { useState } from 'react';
 
-function App() {
-  let [tempTask, setTempTask] = React.useState("");
-  let [tasks, setTasks] = React.useState([]);
-  let taskId = useRef(0);
+export default function App() {
+  let [taskValue, setTaskValue] = useState("");
+  let [taskList, setTaskList] = useState([]);
+  let [editValue, setEditValue] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    let tasksCopy = [...tasks];
-    tasksCopy.push({ id: taskId.current, task: tempTask, editable: false });
-    setTasks(tasksCopy);
-    console.log(tempTask, tasks);
-    taskId.current = taskId.current + 1;
+  const handleClick = () => {
+    if (taskValue.trim() === "") return;
+    let taskItem = {task: taskValue, editable: false};
+    let taskListCopy = [...taskList];
+
+    taskListCopy.push(taskItem);
+    setTaskList(taskListCopy);
+    setTaskValue("");
   }
 
-  function handleDelete(id) {
-    let tasksCopy = [...tasks];
-    tasksCopy = tasksCopy.filter((t) => t.id !== id);
-    setTasks(tasksCopy);
+  const handleEdit = (index) => {
+    let itemsCopy = [...taskList];
+    let item = itemsCopy[index];
+    setEditValue(item.task);
+    item.editable = true;
   }
 
-  function handleEdit(id, text) {
-    console.log(id, text);
-    let tasksCopy = [...tasks];
-    for (let t of tasks) {
-      if (t.id === id) {
-        t.editable = false;
-        t.task = text;
-      }
-    }
-    console.log(tasksCopy);
-    setTasks(tasksCopy);
+  const handleDelete = (index) => {
+    let itemsCopy = [...taskList];
+    itemsCopy.splice(index, 1)
+    setTaskList(itemsCopy);
+  }
+
+  const handleSave = (index) => {
+    if (editValue.trim() === '') return;
+
+    let itemsCopy = [...taskList];
+    let item = itemsCopy[index];
+    item.task = editValue;
+    item.editable = false;
+
+    setTaskList(itemsCopy);
+    setEditValue("");
   }
 
   return (
     <div id="main">
-      <form onSubmit={handleSubmit}>
-        <textarea
-          id="task"
-          onChange={(event) => setTempTask(event.target.value)}
-        />
-        <input type="submit" value="Submit" />
-      </form>
-      {tasks.map((task) => (
-        <Task
-          key={task.id}
-          id={task.id}
-          text={task.task}
-          editable={task.editable}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-        />
-      ))}
+      <textarea
+        id="task"
+        onChange={(event) => { setTaskValue(event.target.value) }}
+        value={taskValue}
+      ></textarea>
+      <button
+        id="btn"
+        onClick={handleClick}
+      >Save</button>
+      <ol>
+        {taskList.map((item, index) => (
+          <li key={index} className="list">
+            <div>
+              <h2>{item.task}</h2>
+              <button className="edit" onClick={() => handleEdit(index)}>Edit</button>
+              <button className="delete" onClick={() => handleDelete(index)}>Delete</button>
+            </div>
+            {item.editable && (<div>
+              <textarea
+                id="task"
+                className="editTask"
+                value={editValue}
+                onChange={(event) => { setEditValue(event.target.value) }}
+              ></textarea>
+              <button
+                id="btn"
+                className="saveTask"
+                onClick={() => { handleSave(index) } }
+              ></button>
+            </div>)}
+          </li>
+        ))}
+      </ol>
     </div>
-  );
+  )
 }
-
-export default App;
