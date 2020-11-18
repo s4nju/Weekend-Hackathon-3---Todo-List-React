@@ -56,10 +56,10 @@ export default function App() {
         {taskList.map((item, index) => (
           <li key={index} className="list">
             <div>
-              <h2>{item.task}</h2>
-              <button className="edit" onClick={() => handleEdit(index)}>Edit</button>
-              <button className="delete" onClick={() => handleDelete(index)}>Delete</button>
+              {item.task}
             </div>
+            <button className="edit" onClick={() => handleEdit(index)}>Edit</button>
+            <button className="delete" onClick={() => handleDelete(index)}>Delete</button>
             {item.editable && (<div>
               <textarea
                 // id="task"
