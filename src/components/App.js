@@ -62,13 +62,13 @@ export default function App() {
             </div>
             {item.editable && (<div>
               <textarea
-                id="task"
+                // id="task"
                 className="editTask"
                 value={editValue}
                 onChange={(event) => { setEditValue(event.target.value) }}
               ></textarea>
               <button
-                id="btn"
+                // id="btn"
                 className="saveTask"
                 onClick={() => { handleSave(index) } }
               ></button>
