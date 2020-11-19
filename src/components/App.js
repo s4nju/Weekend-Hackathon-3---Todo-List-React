@@ -54,26 +54,24 @@ export default function App() {
       >Save</button>
       <ol>
         {taskList.map((item, index) => (
-          <li key={index} className="list">
-            <div>
-              {item.task}
-            </div>
-            <button className="edit" onClick={() => handleEdit(index)}>Edit</button>
-            <button className="delete" onClick={() => handleDelete(index)}>Delete</button>
-            {item.editable && (<div>
-              <textarea
-                // id="task"
-                className="editTask"
-                value={editValue}
-                onChange={(event) => { setEditValue(event.target.value) }}
-              ></textarea>
-              <button
-                // id="btn"
-                className="saveTask"
-                onClick={() => { handleSave(index) } }
-              ></button>
-            </div>)}
-          </li>
+          <div>
+            <li key={index} className="list">{item.task}</li>
+              <button className="edit" onClick={() => handleEdit(index)}>Edit</button>
+              <button className="delete" onClick={() => handleDelete(index)}>Delete</button>
+              {item.editable && (<div>
+                <textarea
+                  // id="task"
+                  className="editTask"
+                  value={editValue}
+                  onChange={(event) => { setEditValue(event.target.value) }}
+                ></textarea>
+                <button
+                  // id="btn"
+                  className="saveTask"
+                  onClick={() => { handleSave(index) }}
+                ></button>
+              </div>)}
+          </div>
         ))}
       </ol>
     </div>
